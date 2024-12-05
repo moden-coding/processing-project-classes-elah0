@@ -13,6 +13,7 @@ public class App extends PApplet{
     boolean moveRight = false;
     boolean moveUp = false;
     boolean moveDown = false;
+    PImage backgroundImage;
     
     ArrayList<Asteroid> asteroids;
     public static void main(String[] args)  {
@@ -23,6 +24,7 @@ public class App extends PApplet{
         asteroids = new ArrayList<>();
         RocketShipImg = loadImage("rocketShip.png");
         asteroidImg = loadImage("asteroid.png");
+        backgroundImage = loadImage("background1.jpg");
         RocketX = width / 2; 
         RocketY = height - 100;
     }
@@ -32,7 +34,7 @@ public class App extends PApplet{
     }
 
     public void draw(){
-        background(0);
+        image(backgroundImage, 0, 0, width, height); 
         image(RocketShipImg, RocketX, RocketY, 40, 70);
         if (moveLeft) {
             RocketX -= Rocketspeed;
@@ -49,9 +51,11 @@ public class App extends PApplet{
         RocketX = constrain(RocketX, 0, width - 40); 
         RocketY = constrain(RocketY, 0, height - 70); 
 
-        if (random(1) < 0.04 && asteroids.size() <10) {
-            float x, y;
-            int edge = (int) random(4);
+        if (random(1) < 0.04) {
+            Asteroid asteroid = new Asteroid(random(width), random(-200, -50), this, asteroidImg, RocketX, RocketY);
+            asteroids.add(asteroid);
+            
+          
             
         }
 
@@ -63,7 +67,7 @@ public class App extends PApplet{
         for(Asteroid a: asteroids){
             a.display();
             a.update();
-            if (a.returnY() > height){
+            if (asteroidsHitsSpaceship(a.returnX(), a.returnY())){
                 a.reset();
 
             }
@@ -84,16 +88,7 @@ public class App extends PApplet{
         }
 
         
-            if(key == ' '){
-                
-                    int x= (int)random(width -100);
-                    int y=(int)random(-200, -50);
-    
-                    Asteroid asteroid=new Asteroid (x, y, this, asteroidImg);
-                    asteroids.add(asteroid);
-                
-                
-            }
+            
         
     }
     public void keyReleased() {
@@ -107,5 +102,10 @@ public class App extends PApplet{
             moveDown = false;
         }
     }
+    public boolean asteroidsHitsSpaceship(float asteroidX , float asteroidY ) { //copied this from my previous game but edited it to work in this game
+       
+            return RocketX + 40 > asteroidX && RocketX < asteroidX + 100 &&
+                   RocketY + 70 > asteroidY && RocketY < asteroidY + 100;
+        }
+    }
 
-}

@@ -3,51 +3,67 @@ import processing.core.PImage;
 
 
 public class Asteroid {
-    private int x;
-    private int y;
+    private float x;
+    private float y;
     private int size;
     private PApplet canvas;
-    private float speed;
-    private int health;
-    private int color;
+    private float yspeed;
+    private float xspeed;
+    
+    
     private PImage asteroidImage;
     
 
-    public Asteroid(int xPos, int yPos, PApplet c, PImage img){
+    public Asteroid(float xPos, float yPos, PApplet c, PImage img, float shipX, float shipY){
         x=xPos;
         y=yPos;
         size=100;
         canvas=c;
-        speed = canvas.random(2, 5);
-        health =3;
-        color=canvas.color(255, 5, 10);
+        
+        float distancex = shipX - x;
+        float distancey =shipY-y;
+        xspeed = canvas.random(-2, 2);
+        
+        
         asteroidImage = img;
 
     }
     public void display(){
-        if(health == 2){
-            color=canvas.color(100, 255, 0);
-        }
-        else if (health==1){
-            color=canvas.color(255, 0, 0);
-        }
-        canvas.fill(color);
         canvas.image(asteroidImage, x, y, size, size);
        
     }
     public void update(){
-        y += speed;
+        x+= xspeed;
+        y += yspeed;
         
     }
     public void reset() {
-        x = (int)canvas.random(canvas.width - 100);
-        y = (int)canvas.random(-200, -50);
-        speed = canvas.random(2, 5);  
-        health = 3;  
-        color = canvas.color(255, 5, 10); 
-    }
-    public int returnY(){
+        int side = (int) canvas.random(4);
+        if (side == 0) {             
+            x = canvas.random(canvas.width);
+            y = -50;
+        } else if (side == 1) {      
+            x = canvas.random(canvas.width);
+            y = canvas.height + 50;
+        } else if (side == 2) {      
+            x = -50;
+            y = canvas.random(canvas.height);
+        } else {                    
+            x = canvas.width + 50;
+            y = canvas.random(canvas.height);
+        }
+
+        xspeed = canvas.random(-2, 2);
+        yspeed = canvas.random(-2, 2);
+        }
+        
+    public float returnY(){
         return y;
     }
+    public float returnX() {
+        return x;
+    }
+    
 }
+
 
