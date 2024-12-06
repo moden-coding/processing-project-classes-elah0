@@ -22,8 +22,8 @@ public class Asteroid {
         
         float distancex = shipX - x;
         float distancey =shipY-y;
-        xspeed = canvas.random(-2, 2);
-        
+        xspeed = canvas.random(2, 4);
+        yspeed = (distancey * xspeed) / distancex;
         
         asteroidImage = img;
 

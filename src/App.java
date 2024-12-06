@@ -16,12 +16,14 @@ public class App extends PApplet{
     PImage backgroundImage;
     
     ArrayList<Asteroid> asteroids;
+    ArrayList<Bullet>bullets;
     public static void main(String[] args)  {
         PApplet.main("App");
     }
 
     public void setup(){
         asteroids = new ArrayList<>();
+        bullets  = new ArrayList<>();
         RocketShipImg = loadImage("rocketShip.png");
         asteroidImg = loadImage("asteroid.png");
         backgroundImage = loadImage("background1.jpg");
@@ -73,6 +75,11 @@ public class App extends PApplet{
             }
            
         }
+        for(Bullet b: bullets){
+           b.display();
+           b.update();
+           
+        }
         
 
     }
@@ -85,6 +92,11 @@ public class App extends PApplet{
             moveUp = true;
         }else if (keyCode == DOWN) {
             moveDown = true;
+        }
+
+        if (keyCode == ' '){
+            Bullet bullet1 = new Bullet(5, this, 5, RocketX, RocketY);
+            bullets.add(bullet1);
         }
 
         
