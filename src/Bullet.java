@@ -11,8 +11,7 @@ public class Bullet {
     public Bullet(int size, PApplet c, float speed, float xPos, float yPos){
         this.size=10;
         canvas=c;
-        speed =5;
-        size =5;
+        this.speed = 5;
         x=xPos;
         y=yPos;
         
@@ -27,6 +26,12 @@ public class Bullet {
         canvas.rect(x-size/2, y, size/2, size*2);
     }
     public void update(){
-       y+=speed;
+       y-=speed;
+    }
+    public float returnY(){
+        return y;
+    }
+    public float returnX() {
+        return x;
     }
 }

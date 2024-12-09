@@ -22,8 +22,15 @@ public class Asteroid {
         
         float distancex = shipX - x;
         float distancey =shipY-y;
-        xspeed = canvas.random(2, 4);
+        xspeed = canvas.random(1, 2);
         yspeed = (distancey * xspeed) / distancex;
+       
+        if (distancex <0){
+            xspeed =-xspeed;
+        }
+        if (distancey <0){
+            yspeed =-yspeed;
+        }
         
         asteroidImage = img;
 
@@ -35,26 +42,57 @@ public class Asteroid {
     public void update(){
         x+= xspeed;
         y += yspeed;
+        if (y < 0) {  
+            y=0;
+            yspeed = -yspeed;  
+        }
+        if (x < 0 || x > canvas.width) { 
+            xspeed = -xspeed;  
+        }
+        if (y > canvas.height) { 
+            yspeed = -yspeed; 
+        }
+        
         
     }
-    public void reset() {
+    public void reset(float shipX, float shipY) {
+        x = canvas.random(0, canvas.width - size);
+        y = -size;
+        
         int side = (int) canvas.random(4);
-        if (side == 0) {             
-            x = canvas.random(canvas.width);
-            y = -50;
-        } else if (side == 1) {      
-            x = canvas.random(canvas.width);
-            y = canvas.height + 50;
-        } else if (side == 2) {      
-            x = -50;
-            y = canvas.random(canvas.height);
-        } else {                    
-            x = canvas.width + 50;
-            y = canvas.random(canvas.height);
+        System.out.println(side);
+        if (side == 0) {
+            x = canvas.random(0, canvas.width - size);
+            y = canvas.height;
+        } else if (side == 1) {
+            x = canvas.random(0, canvas.width - size);
+            y = canvas.height;
+        } else if (side == 2) {
+            x = canvas.width;
+            y = canvas.random(0, canvas.height - size);
+        } else {
+            x = canvas.width;
+            y = canvas.random(0, canvas.height - size);
         }
 
-        xspeed = canvas.random(-2, 2);
-        yspeed = canvas.random(-2, 2);
+        
+        xspeed = canvas.random(1, 3);  
+        float distancex = shipX - x;
+        float distancey = shipY - y;
+
+        
+        yspeed = (distancey * xspeed) / distancex;
+
+        
+        if (distancex < 0) {
+            xspeed = -xspeed;
+        }
+        if (distancey < 0) {
+            yspeed = -yspeed;
+        }
+        xspeed = canvas.random(1, 2);
+       
+        
         }
         
     public float returnY(){
