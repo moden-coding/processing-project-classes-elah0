@@ -12,6 +12,8 @@ public class App extends PApplet {
     boolean moveUp = false;
     boolean moveDown = false;
     PImage backgroundImage;
+    PImage livesImage;
+    PImage explosionImage;
     float playX1 = 390; // Left point
     float playY1 = 400;
     float playX2 = 390; // Bottom point
@@ -22,6 +24,8 @@ public class App extends PApplet {
     int count = 0;
     int lr = 1; // is char facing left or right, 1 is right, -1 is left
     int ud = 1;
+    int lives =3;
+    int frames =120;
 
    
     
@@ -39,8 +43,11 @@ public class App extends PApplet {
         RocketShipImg = loadImage("rocketShip.png");
         asteroidImg = loadImage("asteroid.png");
         backgroundImage = loadImage("background1.jpg");
+        livesImage = loadImage("heart.png");
+        explosionImage = loadImage("Explosion.png");
         RocketX = width / 2;
         RocketY = height - 100;
+        
     }
 
     public void settings() {
@@ -54,6 +61,8 @@ public class App extends PApplet {
         if (scene == 1) {
         image(backgroundImage, 0, 0, width, height);
         image(RocketShipImg, RocketX, RocketY, 40, 70);
+        lives();
+        
         if (moveLeft) {
             RocketX -= Rocketspeed;
         }
@@ -69,11 +78,12 @@ public class App extends PApplet {
         RocketX = constrain(RocketX, 0, width - 40);
         RocketY = constrain(RocketY, 0, height - 70);
 
-        if (random(1) < 0.005) {
-            Asteroid asteroid = new Asteroid(random(width), random(-200, -50), this, asteroidImg, RocketX, RocketY);
-            asteroids.add(asteroid);
-
+        
+        if (frames !=0 && frameCount % frames ==0){
+            asteroidMaker();
         }
+
+        
 
         ArrayList<Bullet> bulletsToRemove = new ArrayList<>();
         ArrayList<Asteroid> asteroidsToRemove = new ArrayList<>();
@@ -83,6 +93,7 @@ public class App extends PApplet {
             a.update();
             if (asteroidsHitsSpaceship(a.returnX(), a.returnY())) {
                 a.reset(RocketX, RocketY);
+                lives--;
 
             }
 
@@ -102,10 +113,20 @@ public class App extends PApplet {
             }
 
         }
+
+
         bullets.removeAll(bulletsToRemove);
         asteroids.removeAll(asteroidsToRemove);
         rocket();
+        fill(255);
+        textSize(30);
+        text("Your score: " + count , 40, 50);
     }
+    else if( scene ==2){
+        EndScreen();
+
+    }
+        
 
     }
 
@@ -130,7 +151,7 @@ public class App extends PApplet {
         }
 
         if (keyCode == ' ') {
-        float bulletX = RocketX + 15; // Default X for bullets
+        float bulletX = RocketX + 15; 
         float bulletY = RocketY;
         float bulletAngle =0;
 
@@ -153,6 +174,10 @@ public class App extends PApplet {
             bullets.add(bullet1);
         }
     
+        
+        if (keyCode == ENTER && scene==2){
+            ResetGame();
+        }
 
     }
 
@@ -228,8 +253,56 @@ public class App extends PApplet {
             rect(RocketX - 30, RocketY + 30, 30, 5);
         }
     }
+    public void ResetGame(){
+        scene = 1;
+        count=0;
+        RocketX = width /2;
+        RocketY= height-100;
+        lr=1;
+        ud=1;
+        bullets.clear();
+        asteroids.clear();
+        lives =3;
+    }
+    public void EndScreen(){
+        background(178, 102, 255);
+        image(explosionImage, 300, 150, 200,200);
+        fill(0);
+        textSize(60);
+        text("Game Over!", 280, 300);
+        fill(14, 2, 2);
+        textSize(40);
+        text("Press enter to play again", 230, 500);
+        textSize(30);
+        fill(255, 255, 255);
+            
+        text("Your Score: " + count, 345, 455); 
+    }
+    public void lives (){
+        if (lives == 3){
+            image(livesImage, 800, 10, 80,80);
+            image(livesImage, 740, 10, 80,80);
+            image(livesImage, 680, 10, 80,80);
+        }
+        else if (lives ==2){
+        image(livesImage, 740, 10, 80,80);
+        image(livesImage, 680, 10, 80,80);
+        }
+        else if (lives ==1){
+        image(livesImage, 680, 10, 80,80);
+        } 
+        else if (lives ==0){
+            scene =2;
+            return;
+        }
+        
+    
 
     }
 
-    
+    public void asteroidMaker(){
+        Asteroid asteroid = new Asteroid(random(width), random(-200, -50), this, asteroidImg, RocketX, RocketY);
+        asteroids.add(asteroid);
+    }
 
+    }

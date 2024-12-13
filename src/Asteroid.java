@@ -76,7 +76,7 @@ public class Asteroid {
         }
 
         
-        xspeed = canvas.random(1, 3);  
+        xspeed = canvas.random(1, 2);  
         float distancex = shipX - x;
         float distancey = shipY - y;
 
@@ -90,7 +90,7 @@ public class Asteroid {
         if (distancey < 0) {
             yspeed = -yspeed;
         }
-        xspeed = canvas.random(1, 2);
+       
        
         
         }

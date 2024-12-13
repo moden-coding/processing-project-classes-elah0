@@ -28,7 +28,7 @@ public class Bullet {
     }
     public void display(){
         canvas.fill(224, 224, 224);
-        canvas.rect(x-size/2, y, size/2, size*2);
+        canvas.rect(x-size/2, y, size/2, size/2);
        
     }
     public void update(){
