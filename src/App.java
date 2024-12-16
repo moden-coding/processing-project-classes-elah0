@@ -1,5 +1,10 @@
 import processing.core.*;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class App extends PApplet {
     PImage RocketShipImg;
@@ -26,6 +31,9 @@ public class App extends PApplet {
     int ud = 1;
     int lives =3;
     int frames =120;
+    int highScore = 0;
+    float changeX =0;
+    float changeY =0;
 
    
     
@@ -38,6 +46,8 @@ public class App extends PApplet {
     }
 
     public void setup() {
+        readHighScore();
+
         asteroids = new ArrayList<>();
         bullets = new ArrayList<>();
         RocketShipImg = loadImage("rocketShip.png");
@@ -100,7 +110,8 @@ public class App extends PApplet {
         }
         for (Bullet b : bullets) {
             b.display();
-            b.update();
+            b.update(changeX, changeY);
+            
 
             for (Asteroid a : asteroids) {
                 if (bulletsHitsAsteroid(b.returnX(), b.returnY(), a.returnX(), a.returnY())) {
@@ -121,12 +132,13 @@ public class App extends PApplet {
         fill(255);
         textSize(30);
         text("Your score: " + count , 40, 50);
+        text("Highscore: " +highScore,40, 90);
     }
     else if( scene ==2){
         EndScreen();
 
     }
-        
+    Highscore();
 
     }
 
@@ -268,15 +280,16 @@ public class App extends PApplet {
         background(178, 102, 255);
         image(explosionImage, 300, 150, 200,200);
         fill(0);
-        textSize(60);
-        text("Game Over!", 280, 300);
+        textSize(90);
+        text("Game Over!", 230, 300);
         fill(14, 2, 2);
         textSize(40);
         text("Press enter to play again", 230, 500);
         textSize(30);
         fill(255, 255, 255);
             
-        text("Your Score: " + count, 345, 455); 
+        text("Your Score: " + count, 345, 400); 
+        text("High Score: " + highScore, 345, 430);
     }
     public void lives (){
         if (lives == 3){
@@ -304,5 +317,38 @@ public class App extends PApplet {
         Asteroid asteroid = new Asteroid(random(width), random(-200, -50), this, asteroidImg, RocketX, RocketY);
         asteroids.add(asteroid);
     }
+    public void Highscore(){
+        if (scene == 2) {  // losing Scene
+            if (count > highScore) {
+                highScore = count; // Update high score if the current score is higher
+                saveHighScore();  //call methos that writes high score to file
+            }
+    }
+    
+    }
+    public void readHighScore(){
+        try (Scanner scanner = new Scanner(Paths.get("highscore.txt"))) {
+
+            // we read the file until all lines have been read
+            while (scanner.hasNextLine()) {
+                // we read one line
+                String row = scanner.nextLine();
+                // we print the line that we read
+               highScore = Integer.valueOf(row);
+            }
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        
+    }
+    public void saveHighScore(){
+        try (PrintWriter writer = new PrintWriter("highscore.txt")){
+            writer.println(highScore); // Writes the integer to the file
+            writer.close(); // Closes the writer and saves the file
+        } catch (IOException e) {
+            System.out.println("An error occurred while writing to the file.");
+            e.printStackTrace();
+        }
 
     }
+}

@@ -9,6 +9,8 @@ public class Asteroid {
     private PApplet canvas;
     private float yspeed;
     private float xspeed;
+   
+
     
     
     private PImage asteroidImage;
@@ -39,7 +41,7 @@ public class Asteroid {
         canvas.image(asteroidImage, x, y, size, size);
        
     }
-    public void update(){
+    public void update(float dx, float dy){
         x+= xspeed;
         y += yspeed;
         if (y < 0) {  
