@@ -100,7 +100,7 @@ public class App extends PApplet {
 
         for (Asteroid a : asteroids) {
             a.display();
-            a.update();
+            a.update(changeX, changeY);
             if (asteroidsHitsSpaceship(a.returnX(), a.returnY())) {
                 a.reset(RocketX, RocketY);
                 lives--;
@@ -110,7 +110,7 @@ public class App extends PApplet {
         }
         for (Bullet b : bullets) {
             b.display();
-            b.update(changeX, changeY);
+            b.update();
             
 
             for (Asteroid a : asteroids) {
@@ -125,6 +125,8 @@ public class App extends PApplet {
 
         }
 
+
+            
 
         bullets.removeAll(bulletsToRemove);
         asteroids.removeAll(asteroidsToRemove);
