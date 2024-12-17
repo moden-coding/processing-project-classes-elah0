@@ -9,6 +9,7 @@ public class Asteroid {
     private PApplet canvas;
     private float yspeed;
     private float xspeed;
+    private float speed;
    
 
     
@@ -21,11 +22,20 @@ public class Asteroid {
         y=yPos;
         size=100;
         canvas=c;
+        speed=15;
         
-        float distancex = shipX - x;
-        float distancey =shipY-y;
-        xspeed = canvas.random(1, 2);
-        yspeed = (distancey * xspeed) / distancex;
+        float distancex = x-shipX;
+        float distancey =y-shipY;
+        //distancex/distancey= xspeed/yspeed;
+        
+        //speed^2 = xspeed^2 + yspeed^2;
+        //speed^2 = yspeed*yspeed*distancex*distancey/(distancey*distancey)+ yspeed^2;
+        //speed^2 =yspeed^2*(distancex*distancex/distancey*distancey+1);
+        //yspeed^2= speed*speed/(distancex*distancex/distancey*distancey+1);
+        yspeed= canvas.sqrt(speed*speed/(distancey/distancex*distancex/distancex+1));
+        xspeed = yspeed*distancex/distancey;
+        //xspeed = canvas.random(1, 2);
+       // yspeed = (distancey * xspeed) / distancex;
        
         if (distancex <0){
             xspeed =-xspeed;
@@ -44,17 +54,12 @@ public class Asteroid {
     public void update(float dx, float dy){
         x+= xspeed;
         y += yspeed;
-        if (y < 0) {  
-            y=0;
-            yspeed = -yspeed;  
+        if (x < 0 || x > canvas.width - size) {
+            xspeed = -xspeed;
         }
-        if (x < 0 || x > canvas.width) { 
-            xspeed = -xspeed;  
+        if (y < 0 || y > canvas.height - size) {
+            yspeed = -yspeed;
         }
-        if (y > canvas.height) { 
-            yspeed = -yspeed; 
-        }
-        
         
     }
     public void reset(float shipX, float shipY) {
@@ -63,35 +68,39 @@ public class Asteroid {
         
         int side = (int) canvas.random(4);
         System.out.println(side);
-        if (side == 0) {
+        if (side == 0) { // Top
             x = canvas.random(0, canvas.width - size);
-            y = canvas.height;
-        } else if (side == 1) {
+            y = -size;
+        } else if (side == 1) { // Bottom
             x = canvas.random(0, canvas.width - size);
-            y = canvas.height;
-        } else if (side == 2) {
-            x = canvas.width;
+            y = canvas.height + size;
+        } else if (side == 2) { // Left
+            x = -size;
             y = canvas.random(0, canvas.height - size);
-        } else {
-            x = canvas.width;
+        } else { // Right
+            x = canvas.width + size;
             y = canvas.random(0, canvas.height - size);
         }
 
-        
-        xspeed = canvas.random(1, 2);  
-        float distancex = shipX - x;
-        float distancey = shipY - y;
 
         
-        yspeed = (distancey * xspeed) / distancex;
+        //xspeed = canvas.random(1, 2);  
+        //float distancex = shipX - x;
+        //float distancey = shipY - y;
 
         
-        if (distancex < 0) {
-            xspeed = -xspeed;
-        }
-        if (distancey < 0) {
-            yspeed = -yspeed;
-        }
+       // yspeed = (distancey * xspeed) / distancex;
+
+        
+       // if (distancex < 0) {
+       //     xspeed = -xspeed;
+       // }
+       // if (distancey < 0) {
+       //yspeed = -yspeed;
+       // }
+       
+       
+        
        
        
         

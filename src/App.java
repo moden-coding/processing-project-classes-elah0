@@ -34,6 +34,7 @@ public class App extends PApplet {
     int highScore = 0;
     float changeX =0;
     float changeY =0;
+    int speed =0;
 
    
     
@@ -97,10 +98,20 @@ public class App extends PApplet {
 
         ArrayList<Bullet> bulletsToRemove = new ArrayList<>();
         ArrayList<Asteroid> asteroidsToRemove = new ArrayList<>();
+        
 
         for (Asteroid a : asteroids) {
             a.display();
             a.update(changeX, changeY);
+            float distancex = RocketX - a.returnX();
+            float distancey = RocketY - a.returnY();
+            float slope = distancex/distancey;
+           changeX = (float)Math.sqrt(speed*speed/(1+slope*slope));
+            if(distancex < 0){
+                changeX = -changeX;
+            }
+           changeY = slope*changeX;
+    
             if (asteroidsHitsSpaceship(a.returnX(), a.returnY())) {
                 a.reset(RocketX, RocketY);
                 lives--;
