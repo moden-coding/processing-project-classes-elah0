@@ -33,7 +33,7 @@ public class Asteroid {
         y=yPos;
         size=100;
         canvas=c;
-        speed=15;
+        speed=20;
         //selfX=xPos;
         //selfY=yPos;
 
