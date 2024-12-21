@@ -9,6 +9,7 @@ import java.util.Scanner;
 public class App extends PApplet {
     PImage RocketShipImg;
     PImage asteroidImg;
+    PImage planetImg;
     float RocketX;
     float RocketY;
     float Rocketspeed = 2;
@@ -30,11 +31,12 @@ public class App extends PApplet {
     int lr = 1; // is char facing left or right, 1 is right, -1 is left
     int ud = 1;
     int lives =3;
-    int frames =120;
+    int frames =100;
     int highScore = 0;
     float changeX =0;
     float changeY =0;
     int speed =0;
+    float bulletAngle =0;
 
    
     
@@ -102,23 +104,30 @@ public class App extends PApplet {
 
         for (Asteroid a : asteroids) {
             a.display();
-            a.update(changeX, changeY);
-            float distancex = RocketX - a.returnX();
-            float distancey = RocketY - a.returnY();
-            float slope = distancex/distancey;
-           changeX = (float)Math.sqrt(speed*speed/(1+slope*slope));
-            if(distancex < 0){
-                changeX = -changeX;
-            }
-           changeY = slope*changeX;
-    
+            a.move();
             if (asteroidsHitsSpaceship(a.returnX(), a.returnY())) {
-                a.reset(RocketX, RocketY);
+                a.reset(RocketX, RocketY, count);
                 lives--;
+                System.out.println("ship hit");
+               
 
             }
-
+            
+            //float distancex = RocketX - a.returnX();
+           // float distancey = RocketY - a.returnY();
+           // float slope = distancex/distancey;
+           //changeX = (float)Math.sqrt(speed*speed/(1+slope*slope));
+          //  if(distancex < 0){
+          //      changeX = -changeX;
+          //  }
+           //changeY = slope*changeX;
+           
         }
+            
+            
+
+        
+        
         for (Bullet b : bullets) {
             b.display();
             b.update();
@@ -156,19 +165,19 @@ public class App extends PApplet {
     }
 
     public void keyPressed() {
-        if (keyCode == LEFT) {
+        if (keyCode == LEFT || keyCode == 'A') {
             moveLeft = true;
             lr=-1;
             ud=0;
-        } else if (keyCode == RIGHT) {
+        } else if (keyCode == RIGHT || keyCode == 'D') {
             moveRight = true;
             lr=1;
             ud=0;
-        } else if (keyCode == UP) {
+        } else if (keyCode == UP || keyCode == 'W') {
             moveUp = true;
             ud=1; 
             lr=0;
-        } else if (keyCode == DOWN) {
+        } else if (keyCode == DOWN || keyCode == 'S') {
             moveDown = true;
             ud=-1;
             lr=0;
@@ -198,6 +207,8 @@ public class App extends PApplet {
             Bullet bullet1 = new Bullet(5, this, 5, RocketX, RocketY, bulletAngle);
             bullets.add(bullet1);
         }
+
+        
     
         
         if (keyCode == ENTER && scene==2){
@@ -207,13 +218,13 @@ public class App extends PApplet {
     }
 
     public void keyReleased() {
-        if (keyCode == LEFT) {
+        if (keyCode == LEFT || keyCode == 'A') {
             moveLeft = false;
-        } else if (keyCode == RIGHT) {
+        } else if (keyCode == RIGHT || keyCode == 'D') {
             moveRight = false;
-        } else if (keyCode == UP) {
+        } else if (keyCode == UP || keyCode == 'W') {
             moveUp = false;
-        } else if (keyCode == DOWN) {
+        } else if (keyCode == DOWN || keyCode == 'S') {
             moveDown = false;
         }
     }
@@ -251,6 +262,11 @@ public class App extends PApplet {
         if (scene == 0 && mouseInButton()) {
             scene = 1; // Start the game when play button is clicked
         }
+        if(scene == 1){
+            Bullet bullet2 = new Bullet(5, this, 5, RocketX, RocketY, mouseX, mouseY);
+            bullets.add(bullet2);
+        }
+       
     }
     boolean mouseInButton () {
         //Detect if the play button is clicked by checking the color
@@ -364,4 +380,5 @@ public class App extends PApplet {
         }
 
     }
+    
 }
