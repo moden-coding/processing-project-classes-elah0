@@ -41,8 +41,8 @@ public class App extends PApplet {
    
     
 
-    ArrayList<Asteroid> asteroids;
-    ArrayList<Bullet> bullets;
+    ArrayList<Asteroid> asteroids; //Create the array list to store asteroids
+    ArrayList<Bullet> bullets; //create the array list to store bullets
 
     public static void main(String[] args) {
         PApplet.main("App");
@@ -53,7 +53,7 @@ public class App extends PApplet {
 
         asteroids = new ArrayList<>();
         bullets = new ArrayList<>();
-        RocketShipImg = loadImage("rocketShip.png");
+        RocketShipImg = loadImage("rocketShip.png"); //load all the images
         asteroidImg = loadImage("asteroid.png");
         backgroundImage = loadImage("background1.jpg");
         livesImage = loadImage("heart.png");
@@ -76,7 +76,7 @@ public class App extends PApplet {
         image(RocketShipImg, RocketX, RocketY, 40, 70);
         lives();
         
-        if (moveLeft) {
+        if (moveLeft) { //movement
             RocketX -= Rocketspeed;
         }
         if (moveRight) {
@@ -92,20 +92,20 @@ public class App extends PApplet {
         RocketY = constrain(RocketY, 0, height - 70);
 
         
-        if (frames !=0 && frameCount % frames ==0){
+        if (frames !=0 && frameCount % frames ==0){ //create asteroids by frames
             asteroidMaker();
         }
 
         
 
-        ArrayList<Bullet> bulletsToRemove = new ArrayList<>();
+        ArrayList<Bullet> bulletsToRemove = new ArrayList<>(); //array lists to remove bullets and asteroids
         ArrayList<Asteroid> asteroidsToRemove = new ArrayList<>();
         
 
         for (Asteroid a : asteroids) {
             a.display();
             a.move();
-            if (asteroidsHitsSpaceship(a.returnX(), a.returnY())) {
+            if (asteroidsHitsSpaceship(a.returnX(), a.returnY())) { //if asteroid is hit reset it and take away a life
                 a.reset(RocketX, RocketY, count);
                 lives--;
                 System.out.println("ship hit");
@@ -134,7 +134,7 @@ public class App extends PApplet {
             
 
             for (Asteroid a : asteroids) {
-                if (bulletsHitsAsteroid(b.returnX(), b.returnY(), a.returnX(), a.returnY())) {
+                if (bulletsHitsAsteroid(b.returnX(), b.returnY(), a.returnX(), a.returnY())) { //if the bullet hits asteroids remove it
                     bulletsToRemove.add(b);
                     asteroidsToRemove.add(a);
                     count++;
@@ -153,10 +153,11 @@ public class App extends PApplet {
         rocket();
         fill(255);
         textSize(30);
-        text("Your score: " + count , 40, 50);
-        text("Highscore: " +highScore,40, 90);
+        text("Your score: " + count , 40, 50); //print score
+        text("Highscore: " +highScore,40, 90); //print highscore
     }
-    else if( scene ==2){
+    else if( scene ==2){ 
+        //display the game over screen
         EndScreen();
 
     }
@@ -165,9 +166,10 @@ public class App extends PApplet {
     }
 
     public void keyPressed() {
-        if (keyCode == LEFT || keyCode == 'A') {
+        //movement with arrow keys and wasd
+        if (keyCode == LEFT || keyCode == 'A') { 
             moveLeft = true;
-            lr=-1;
+            lr=-1; //move the gun
             ud=0;
         } else if (keyCode == RIGHT || keyCode == 'D') {
             moveRight = true;
@@ -184,7 +186,7 @@ public class App extends PApplet {
             
         }
 
-        if (keyCode == ' ') {
+        if (keyCode == ' ') { //shoot when you hit space bar
         float bulletX = RocketX + 15; 
         float bulletY = RocketY;
         float bulletAngle =0;
@@ -217,7 +219,7 @@ public class App extends PApplet {
 
     }
 
-    public void keyReleased() {
+    public void keyReleased() { //stop movement when key released
         if (keyCode == LEFT || keyCode == 'A') {
             moveLeft = false;
         } else if (keyCode == RIGHT || keyCode == 'D') {
@@ -231,15 +233,16 @@ public class App extends PApplet {
 
     public boolean asteroidsHitsSpaceship(float asteroidX, float asteroidY) { // copied this from my previous game but
                                                                               // edited it to work in this game
+                                                                              //detects collision 
 
         return RocketX + 40 > asteroidX && RocketX < asteroidX + 100 &&
                 RocketY + 70 > asteroidY && RocketY < asteroidY + 100;
     }
-    public boolean bulletsHitsAsteroid(float bulletX, float bulletY, float asteroidX, float asteroidY) {
+    public boolean bulletsHitsAsteroid(float bulletX, float bulletY, float asteroidX, float asteroidY) { //same logic from my old game, detects collision
         return bulletX + 5 > asteroidX && bulletX - 5 < asteroidX + 100 &&
                 bulletY > asteroidY && bulletY < asteroidY + 100;
     }
-    public void StartScreen(){
+    public void StartScreen(){ //creates the starting screen 
         background(0);
         textSize(90);
         textAlign(CENTER, TOP);
@@ -294,7 +297,7 @@ public class App extends PApplet {
             rect(RocketX - 30, RocketY + 30, 30, 5);
         }
     }
-    public void ResetGame(){
+    public void ResetGame(){ //restart the game
         scene = 1;
         count=0;
         RocketX = width /2;
@@ -305,7 +308,7 @@ public class App extends PApplet {
         asteroids.clear();
         lives =3;
     }
-    public void EndScreen(){
+    public void EndScreen(){ //game over screen
         background(178, 102, 255);
         image(explosionImage, 300, 150, 200,200);
         fill(0);
@@ -320,7 +323,7 @@ public class App extends PApplet {
         text("Your Score: " + count, 345, 400); 
         text("High Score: " + highScore, 345, 430);
     }
-    public void lives (){
+    public void lives (){ //create lives
         if (lives == 3){
             image(livesImage, 800, 10, 80,80);
             image(livesImage, 740, 10, 80,80);
@@ -342,7 +345,7 @@ public class App extends PApplet {
 
     }
 
-    public void asteroidMaker(){
+    public void asteroidMaker(){ //creates asteroids
         Asteroid asteroid = new Asteroid(random(width), random(-200, -50), this, asteroidImg, RocketX, RocketY);
         asteroids.add(asteroid);
     }
@@ -350,12 +353,12 @@ public class App extends PApplet {
         if (scene == 2) {  // losing Scene
             if (count > highScore) {
                 highScore = count; // Update high score if the current score is higher
-                saveHighScore();  //call methos that writes high score to file
+                saveHighScore();  //call methods that writes high score to file
             }
     }
     
     }
-    public void readHighScore(){
+    public void readHighScore(){ //uses file reading for highscore
         try (Scanner scanner = new Scanner(Paths.get("highscore.txt"))) {
 
             // we read the file until all lines have been read
@@ -370,7 +373,7 @@ public class App extends PApplet {
         }
         
     }
-    public void saveHighScore(){
+    public void saveHighScore(){ //writes the score to file
         try (PrintWriter writer = new PrintWriter("highscore.txt")){
             writer.println(highScore); // Writes the integer to the file
             writer.close(); // Closes the writer and saves the file

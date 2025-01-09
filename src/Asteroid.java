@@ -45,7 +45,7 @@ public class Asteroid {
         float distancey =shipY-y;
         System.out.println("ship y" + y);
         System.out.println("distance y " + distancey);
-        float distance =canvas.dist(shipX, shipY, x, y);
+        float distance =canvas.dist(shipX, shipY, x, y); //deals with asteroid movement
         xmove=distancex * speed/distance;
         System.out.println("X speed " + xmove);
         ymove=distancey* speed/distance;
